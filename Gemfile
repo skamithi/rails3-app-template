@@ -49,6 +49,8 @@ gem "simple_form"
 gem "haml"
 gem "haml-rails"
 
+# SASS
+gem 'sass'
 
 # Deploy with Capistrano
 # gem 'capistrano'
