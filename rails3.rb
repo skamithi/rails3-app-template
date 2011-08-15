@@ -36,9 +36,9 @@ generate "rspec:install"
 generate "cucumber:install --capybara --rspec"
 # copy cucumber files
 feature_support_dir = 'features/support'
-template_path = rails_template_root + feature_support_dir
+template_path = [rails_template_root , '/', feature_support_dir].join('/')
 ['factory_girl.rb'].each do |filename|
-  file "#{feature_support_dir}/#{filename}", "#{template_path}/#{filename}"
+  copy_file "#{template_path}/#{filename}", "#{feature_support_dir}/#{filename}"
 end
 
 #generate pickle
@@ -72,6 +72,7 @@ inject_into_file 'app/controllers/application_controller.rb' , :after => "protec
   end
 
   STORELOCATION
+end
 
 # add time format
 #environment 'Time::DATE_FORMATS.merge!(:default => "%Y/%m/%d %I:%M %p", :ymd => "%Y/%m/%d")'
@@ -99,8 +100,8 @@ run "touch tmp/.gitkeep"
 run "touch log/.gitkeep"
 
 # git commit
-#git :init
-#git :add => '.'
+# git :init
+# git :add => '.'
 #git :add => 'tmp/.gitkeep -f'
 #git :add => 'log/.gitkeep -f'
 #git :commit => "-a -m 'initial commit'"
