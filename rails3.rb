@@ -84,9 +84,13 @@ end
 
 # copy error handing controller
 app_controller_path = 'app/controllers'
+app_view_path ='app/views/errors/'
 filename = 'errors_controller.rb'
+filename2 = 'errors.html.haml'
 copy_file "#{rails_template_root}/#{app_controller_path}/#{filename}", "#{app_controller_path}/#{filename}"
+copy_file "#{rails_template_root}/#{app_view_path}/#{filename2}", "#{app_view_path}/#{filename2}"
 inject_into_file "config/routes.rb", "  match '*a', :to => 'errors#routing'\n", :after => "Application.routes.draw do\n"
+
 
 
 #copy scaffold controller.rb
