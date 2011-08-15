@@ -54,12 +54,20 @@ empty_directory 'app/coffeescripts'
 
 
 #copy guardfile
-copy_file 'Guardfile', "#{rails_template_root}/Guardfile"
+copy_file "#{rails_template_root}/Guardfile", "Guardfile"
+
 
 # Update application controller with store location functionality.
 inject_into_file 'app/controllers/application_controller.rb' , :after => "protect_from_forgery\n" do
   <<-STORELOCATION
   after_filter :store_location
+  helper_methods :go_back_path
+
+  protected
+
+  def go_back_path
+    session[:return_to] || root_path
+  end
 
   def store_location
     session[:return_to] = request.fullpath if request.get? and
@@ -73,6 +81,18 @@ inject_into_file 'app/controllers/application_controller.rb' , :after => "protec
 
   STORELOCATION
 end
+
+# copy error handing controller
+app_controller_path = 'app/controllers'
+filename = 'errors_controller.rb'
+copy_file "#{rails_template_root}/#{app_controller_path}/#{filename}", "#{app_controller_path}/#{filename}"
+inject_into_file "config/routes.rb", "  match '*a', :to => 'errors#routing'\n", :after => "Application.routes.draw do\n"
+
+
+#copy scaffold controller.rb
+scaffold_path = 'lib/templates/rails/scaffold_controller'
+filename = 'controller.rb'
+copy_file "#{rails_template_root}/#{scaffold_path}/#{filename}", "#{scaffold_path}/#{filename}"
 
 # add time format
 #environment 'Time::DATE_FORMATS.merge!(:default => "%Y/%m/%d %I:%M %p", :ymd => "%Y/%m/%d")'
