@@ -18,7 +18,7 @@ gem 'thin'
 gem 'mysql2', '0.2.6'
 
 #Basic search help engine
-gem 'meta-where'
+gem 'meta_where'
 
 #Full Text searching engine
 gem 'sunspot'
