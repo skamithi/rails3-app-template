@@ -56,6 +56,12 @@ gem 'sass'
 # gem 'capistrano'
 
 
+group :development do
+  gem 'guard-sass'
+  gem 'livereload'
+  gem 'guard-livereload'
+end
+
 group :test, :development do
   gem 'ruby-debug19', :require => 'ruby-debug'
   gem 'w3c_validators'
