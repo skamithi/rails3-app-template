@@ -39,6 +39,7 @@ generate "simple_form:install"
 
 #generate coffeescript files
 generate "barista:install"
+empty_directory 'app/coffeescripts'
 # add app/coffescripts directory
 
 # copy cucumber files
