@@ -1,3 +1,5 @@
+rails_template_root = File.dirname(rails_template) + '/rails_root'
+
 # execute rvm
 run "rvm use 1.9.2 --rvmrc"
 
@@ -9,7 +11,7 @@ run "cp config/database.yml config/database.yml.example"
 
 # install gems
 run "rm Gemfile"
-file 'Gemfile', File.read("#{File.dirname(rails_template)}/Gemfile")
+file 'Gemfile', File.read("#{rails_template_root}/Gemfile")
 
 # bundle install
 run "bundle install"
@@ -31,8 +33,8 @@ generate "rspec:install"
 #generate cucubmer
 generate "cucumber:install --capybara --rspec"
 # copy cucumber files
-feature_support_dir = '/features/support'
-template_path = File.dirname(rails_template) + feature_support_dir
+feature_support_dir = 'features/support'
+template_path = rails_template_root + feature_support_dir
 ['factory_girl.rb'].each do |filename|
   file "#{feature_support_dir}/#{filename}", "#{template_path}/#{filename}"
 end
@@ -49,6 +51,8 @@ empty_directory 'app/coffeescripts'
 # add app/coffescripts directory
 
 
+#copy guardfile
+copy_file 'Guardfile', "#{rails_template_root}/Guardfile"
 
 # Update application controller with store location functionality.
 inject_into_file 'app/controllers/application_controller.rb' , :after => "protect_from_forgery\n" do
