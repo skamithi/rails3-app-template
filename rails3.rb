@@ -32,7 +32,12 @@ GENERATORS
 # generate rspec
 generate "rspec:install"
 
-#generate cucubmer
+#change mock testing to use RR
+rspec_helper = 'spec/spec_helper.rb'
+gsub_file rspec_helper, /#\s*(config.mock_with :rr)/, '\1'
+gsub_file rspec_helper, /(config.mock_with :rspec)/, '#\1'
+
+#generate cucumber
 generate "cucumber:install --capybara --rspec"
 # copy cucumber files
 feature_support_dir = 'features/support'
