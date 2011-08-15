@@ -56,12 +56,6 @@ gem 'sass'
 # gem 'capistrano'
 
 
-group :development do
-  gem 'guard-sass'
-  gem 'livereload'
-  gem 'guard-livereload'
-end
-
 group :test, :development do
   gem 'ruby-debug19', :require => 'ruby-debug'
   gem 'w3c_validators'
@@ -77,7 +71,11 @@ group :test, :development do
   gem 'database_cleaner'
   gem 'pickle'
   gem 'factory_girl_rails'
+  gem 'rr'
   gem 'launchy'
   gem 'escape_utils'
+  gem 'guard-sass'
+  gem 'livereload'
+  gem 'guard-livereload'
 end
 
