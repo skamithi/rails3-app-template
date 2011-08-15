@@ -123,10 +123,10 @@ CODE
 run "touch tmp/.gitkeep"
 run "touch log/.gitkeep"
 
-# git commit
-# git :init
-# git :add => '.'
-#git :add => 'tmp/.gitkeep -f'
-#git :add => 'log/.gitkeep -f'
-#git :commit => "-a -m 'initial commit'"
+
+git :init
+git :add => '.'
+git :add => 'tmp/.gitkeep -f'
+git :add => 'log/.gitkeep -f'
+git :commit => "-a -m 'initial commit'"
 
