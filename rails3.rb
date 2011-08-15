@@ -30,6 +30,12 @@ generate "rspec:install"
 
 #generate cucubmer
 generate "cucumber:install --capybara --rspec"
+# copy cucumber files
+feature_support_dir = '/features/support'
+template_path = File.dirname(rails_template) + feature_support_dir
+['factory_girl.rb'].each do |filename|
+  file "#{feature_support_dir}/#{filename}", "#{template_path}/#{filename}"
+end
 
 #generate pickle
 generate "pickle --path --email"
@@ -42,21 +48,24 @@ generate "barista:install"
 empty_directory 'app/coffeescripts'
 # add app/coffescripts directory
 
-# copy cucumber files
-#feature_support_dir = '/features/support'
-#template_path = File.dirname(rails_template) + feature_support_dir
-#['factory_girl.rb'].each do |filename|
-#file "#{feature_support_dir}/#{filename}", "#{template_path}/#{filename}"
-#end
-
-#file 'script/watchr.rb', File.read("#{File.dirname(rails_template)}/featu")
-#file 'lib/tasks/dev.rake', File.read("#{File.dirname(rails_template)}/dev.rake")
-
-# install jquery
 
 
-gsub_file 'config/application.rb', /(config.action_view.javascript_expansions.*)/,
-                                   "config.action_view.javascript_expansions[:defaults] = %w(jquery rails)"
+# Update application controller with store location functionality.
+inject_into_file 'app/controllers/application_controller.rb' , :after => "protect_from_forgery\n" do
+  <<-STORELOCATION
+  after_filter :store_location
+
+  def store_location
+    session[:return_to] = request.fullpath if request.get? and
+      controller_name != "user_sessions" and  controller_name != "sessions"
+  end
+
+  # set default redirect back if no session is set to root_path
+  def redirect_back_or_default(default = root_path)
+    redirect_to(session[:return_to] || default)
+  end
+
+  STORELOCATION
 
 # add time format
 #environment 'Time::DATE_FORMATS.merge!(:default => "%Y/%m/%d %I:%M %p", :ymd => "%Y/%m/%d")'
