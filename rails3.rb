@@ -16,6 +16,8 @@ file 'Gemfile', File.read("#{rails_template_root}/Gemfile")
 # bundle install
 run "bundle install"
 
+# create sass directory
+empty_directory 'public/stylesheets/sass'
 
 application  <<-GENERATORS
 config.generators do |g|
