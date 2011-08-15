@@ -21,6 +21,7 @@ config.generators do |g|
   g.test_framework  :rspec, :fixture => true, :views => false
   g.integration_tool :rspec, :fixture => true, :views => true
   g.fixture_replacement :factory_girl, :dir => "spec/support/factories"
+  g.stylesheets false
 end
 GENERATORS
 
@@ -40,9 +41,15 @@ generate "simple_form:install"
 generate "barista:install"
 # add app/coffescripts directory
 
-# copy files
-file 'script/watchr.rb', File.read("#{File.dirname(rails_template)}/watchr.rb")
-file 'lib/tasks/dev.rake', File.read("#{File.dirname(rails_template)}/dev.rake")
+# copy cucumber files
+#feature_support_dir = '/features/support'
+#template_path = File.dirname(rails_template) + feature_support_dir
+#['factory_girl.rb'].each do |filename|
+#file "#{feature_support_dir}/#{filename}", "#{template_path}/#{filename}"
+#end
+
+#file 'script/watchr.rb', File.read("#{File.dirname(rails_template)}/featu")
+#file 'lib/tasks/dev.rake', File.read("#{File.dirname(rails_template)}/dev.rake")
 
 # install jquery
 
