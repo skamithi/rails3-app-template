@@ -11,6 +11,10 @@ gem 'therubyracer'
 gem 'barista'
 gem 'jquery-rails'
 
+#css specific
+gem 'bourbon'
+gem 'lessframework-rails'
+
 # rails server
 gem 'thin'
 

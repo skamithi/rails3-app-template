@@ -16,8 +16,7 @@ file 'Gemfile', File.read("#{rails_template_root}/Gemfile")
 # bundle install
 run "bundle install"
 
-# create sass directory
-empty_directory 'public/stylesheets/sass'
+
 
 application  <<-GENERATORS
 config.generators do |g|
@@ -57,6 +56,11 @@ generate "barista:install"
 empty_directory 'app/coffeescripts'
 # add app/coffescripts directory
 
+#generate sass files
+# create sass directory
+empty_directory 'public/stylesheets/sass'
+run 'rake bourbon:install'
+run 'mv public/stylesheets/sass/bourbon app/sass/'
 
 #copy guardfile
 copy_file "#{rails_template_root}/Guardfile", "Guardfile"
