@@ -70,7 +70,7 @@ copy_file "#{rails_template_root}/Guardfile", "Guardfile"
 inject_into_file 'app/controllers/application_controller.rb' , :after => "protect_from_forgery\n" do
   <<-STORELOCATION
   after_filter :store_location
-  helper_methods :go_back_path
+  helper_method :go_back_path
 
   protected
 
