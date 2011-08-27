@@ -61,7 +61,8 @@ gem 'sass'
 
 
 group :test, :development do
-  gem 'ruby-debug19', :require => 'ruby-debug'
+  gem 'pry'
+  gem 'pry-doc'
   gem 'w3c_validators'
   gem 'cucumber'
   gem 'cucumber-rails'
