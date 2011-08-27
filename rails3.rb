@@ -74,22 +74,46 @@ inject_into_file 'app/controllers/application_controller.rb' , :after => "protec
 
   protected
 
+  # use this in link_to statements
+  # Example: link_to 'Back', go_back_path
   def go_back_path
     session[:return_to] || root_path
   end
 
+  # executed by the after_filter defined in application_controller
   def store_location
     session[:return_to] = request.fullpath if request.get? and
       controller_name != "user_sessions" and  controller_name != "sessions"
   end
 
   # set default redirect back if no session is set to root_path
+  # Use in controller functions that render views
   def redirect_back_or_default(default = root_path)
     redirect_to(session[:return_to] || default)
   end
 
   STORELOCATION
 end
+
+#add app wide view functions to application_helper.rb
+inject_into_file 'app/helpers/application_helper.rb', :after => "module ApplicationHelper\n" do
+  <<-VIEWHELPERS
+  # Defines a way to perseve the parameters in the previous form in the current form
+  # Usage: <%= simple_form_for @select_a_meaning,
+  #              :url => url_for(merge_params(:controller => 'words', :action => 'select_a_meaning')) do |f| %>
+  def merge_params(p={})
+    params.merge(p).delete_if{|k,v| v.blank?}
+  end
+
+  #print list of app specific css files
+  def app_stylesheets(css_files)
+    css_files.map {|cf| stylesheet_link_tag cf, :media => 'all' }.join
+  end
+
+  VIEWHELPERS
+
+end
+
 
 # copy error handing controller
 app_controller_path = 'app/controllers'
