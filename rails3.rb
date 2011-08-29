@@ -122,6 +122,13 @@ filename = 'errors_controller.rb'
 filename2 = 'errors.html.haml'
 copy_file "#{rails_template_root}/#{app_controller_path}/#{filename}", "#{app_controller_path}/#{filename}"
 copy_file "#{rails_template_root}/#{app_view_path}/#{filename2}", "#{app_view_path}/#{filename2}"
+
+#copy core application view file
+app_view_path= 'app/views/layouts'
+filename = 'application'
+remove_file "app/views/layouts/#{filename}.html.erb"
+copy_file "#{rails_template_root}/#{app_view_path}/#{filename}.html.haml", "#{app_view_path}/#{filename}.html.haml"
+
 inject_into_file "config/routes.rb", "  match '*a', :to => 'errors#routing'\n", :after => "Application.routes.draw do\n"
 
 

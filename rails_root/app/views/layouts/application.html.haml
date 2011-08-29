@@ -5,7 +5,7 @@
     %title [PUT MY TITLE HERE]
     %meta { 'charset' => 'utf-8' }/
     / Disable phone number linking
-		%meta { 'name' =>'format-detection',  'content'=>"telephone=no"}/
+    %meta { 'name' =>'format-detection',  'content'=>"telephone=no"}/
 
     / Global stylesheets
     = stylesheet_link_tag 'reset', :media => 'all'
@@ -33,7 +33,6 @@
     = render 'shared/footer'
 
   = javascript_include_tag :defaults, 'less-grid-4'
-		/[if lt IE 9]
-		  %script { :type => 'text/javascript',
-                :src  => "http://html5shiv.googlecode.com/svn/trunk/html5.js" }
+  /[if lt IE 9]
+	  %script { :type => 'text/javascript', :src  => "http://html5shiv.googlecode.com/svn/trunk/html5.js" }
 
