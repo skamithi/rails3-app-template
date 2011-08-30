@@ -10,7 +10,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
   def show
     @<%= singular_table_name %> = <%= orm_class.find(class_name, "params[:id]") %>
-    if <% singular_table_name %>.blank?
+    if @<%= singular_table_name %>.blank?
       error_routing
     else
       respond_to do |format|
@@ -30,7 +30,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
   def edit
     @<%= singular_table_name %> = <%= orm_class.find(class_name, "params[:id]") %>
-    if <%= singular_table_name %>.blank?
+    if @<%= singular_table_name %>.blank?
       error_routing
     else
       render
@@ -64,7 +64,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
   def destroy
     @<%= singular_table_name %> = <%= orm_class.find(class_name, "params[:id]") %>
-    if <%= singular_table_name %>.blank?
+    if @<%= singular_table_name %>.blank?
       flash[:error] = 'Unable to delete <%= human_name %>'
       error_routing
     else
