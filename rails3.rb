@@ -65,7 +65,6 @@ run 'mv public/stylesheets/sass/bourbon app/sass/'
 #copy guardfile
 copy_file "#{rails_template_root}/Guardfile", "Guardfile"
 
-
 # Update application controller with store location functionality.
 inject_into_file 'app/controllers/application_controller.rb' , :after => "protect_from_forgery\n" do
   <<-STORELOCATION
@@ -114,6 +113,11 @@ inject_into_file 'app/helpers/application_helper.rb', :after => "module Applicat
 
 end
 
+#copy config init files
+config_init_path = 'config/initializers'
+%w{active_record_fixes escape_utils form_default_options}.each do |file|
+  copy_file "#{rails_template_root}/#{config_init_path}/#{file}.rb", "#{config_init_path}/#{file}.rb"
+end
 
 # copy error handing controller
 app_controller_path = 'app/controllers'
