@@ -65,6 +65,9 @@ run 'mv public/stylesheets/sass/bourbon app/sass/'
 #copy guardfile
 copy_file "#{rails_template_root}/Guardfile", "Guardfile"
 
+#create jquery files
+generate "jquery:install --ui"
+
 # Update application controller with store location functionality.
 inject_into_file 'app/controllers/application_controller.rb' , :after => "protect_from_forgery\n" do
   <<-STORELOCATION
