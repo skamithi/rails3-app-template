@@ -1,3 +1,5 @@
+require 'find'
+
 rails_template_root = File.dirname(rails_template) + '/rails_root'
 
 # execute rvm
@@ -60,7 +62,11 @@ empty_directory 'app/coffeescripts'
 # create sass directory
 empty_directory 'public/stylesheets/sass'
 run 'rake bourbon:install'
-run 'mv public/stylesheets/sass/bourbon app/sass/'
+remove_dir "app/sass/bourbon"
+run "mv public/stylesheets/sass/bourbon app/sass/bourbon"
+remove_dir "public/stylesheets/sass"
+directory  "#{rails_template_root}/public/stylesheets", "public/stylesheets"
+
 
 #copy guardfile
 copy_file "#{rails_template_root}/Guardfile", "Guardfile"

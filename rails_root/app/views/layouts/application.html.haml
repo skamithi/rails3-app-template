@@ -8,17 +8,17 @@
     %meta{:name =>'format-detection',  :content=>"telephone=no" }/
 
     / Global stylesheets
-    = stylesheet_link_tag 'reset', :media => 'all'
-    = stylesheet_link_tag 'style', :media => 'all'
+    = stylesheet_link_tag 'less/reset', :media => 'all'
+    = stylesheet_link_tag 'less/style', :media => 'all'
 
     / Fallback if browser does not support media queries. ie IE7, IE8
-    = stylesheet_link_tag '10col', :media => 'all'
+    = stylesheet_link_tag 'less/10col', :media => 'all'
 
     / Media Queries...LESS
-    = stylesheet_link_tag '10col', :media => 'only screen and (min-width: 992px)'
-    = stylesheet_link_tag '8col',  :media => 'only screen and (min-width: 768px) and (max-width: 991px)'
-    = stylesheet_link_tag '3col',  :media => 'only screen and (max-width: 767px)'
-    = stylesheet_link_tag '5col',  :media => 'only screen and (min-width: 480px) and (max-width: 767px)'
+    = stylesheet_link_tag 'less/10col', :media => 'only screen and (min-width: 992px)'
+    = stylesheet_link_tag 'less/8col',  :media => 'only screen and (min-width: 768px) and (max-width: 991px)'
+    = stylesheet_link_tag 'less/3col',  :media => 'only screen and (max-width: 767px)'
+    = stylesheet_link_tag 'less/5col',  :media => 'only screen and (min-width: 480px) and (max-width: 767px)'
 
     / smartphone stuff
     %meta{:name => 'viewport', :content => 'width=device-width; initial-scale=1'}/
