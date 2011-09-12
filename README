@@ -1,10 +1,9 @@
-# Installation
-
-	git clone git://github.com/ihower/rails3-app-template.git
+# Summary
+  Creates new Rails 3.1 app with my customizations
 
 # Usage
 
-	rails new your_project_name -TJ -d mysql -m rails3-app-template/rails3.rb
+	rails new your_project_name -d mysql -m rails3-app-template/rails3.rb
 	
 # License
 
