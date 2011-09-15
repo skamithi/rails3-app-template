@@ -18,6 +18,8 @@
 run "rvm use 1.9.2@rails31 --rvmrc"
 
 gem 'rails3-generators'
+gem 'pry'
+gem 'pry-doc'
 
 @recipes = ["jquery", "haml", "cucumber", "capybara", "compass", "html5", "home_page", "guard", "rspec", "sass"]
 
