@@ -18,8 +18,6 @@
 run "rvm use 1.9.2@rails31 --rvmrc"
 
 gem 'rails3-generators'
-gem 'pry'
-gem 'pry-doc'
 
 @recipes = ["jquery", "haml", "cucumber", "capybara", "compass", "html5", "home_page", "guard", "rspec", "sass"]
 
@@ -861,8 +859,22 @@ after_bundler do
 
 end
 
-# >-------------------[ Update gitignore] ------------------------------------<
+# >------------------[ add pry ] --------------------------------------------<
+gem 'pry'
+gem 'pry-doc'
 after_bundler do
+  append_file 'config/environments/development.rb', <<-RUBY
+silence_warnings do
+  require 'pry'
+  IRB = Pry
+end
+RUBY
+end
+
+# >-------------------[ Update gitignore] ------------------------------------<
+
+after_bundler do
+  remove_dir "spec/requests"
   append_file '.gitignore', <<-CODE
 bin/
 .rvm*
