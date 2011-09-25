@@ -642,7 +642,6 @@ if config['rspec']
     say_wizard "REMINDER: When creating a Rails app using RSpec..."
     say_wizard "you should add the '-T' flag to 'rails new'"
     gem 'rspec-rails', '2.6.1', :group => [:development, :test]
-    gem 'shoulda-matchers', :group => [:development, :test]
     if recipes.include? 'mongoid'
       # use the database_cleaner gem to reset the test database
       gem 'database_cleaner', '0.6.7', :group => :test
@@ -667,6 +666,7 @@ if config['rspec']
       gem 'factory_girl_rails', '>= 1.2.0', :group => :test
     end
   end
+  gem 'shoulda-matchers', :group => [:development, :test]
 else
   recipes.delete('rspec')
 end
