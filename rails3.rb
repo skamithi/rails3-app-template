@@ -776,6 +776,11 @@ RUBY
 end
 
 
+# >----------------------------[ Simple form ] ------------------------------<
+gem 'simple_form'
+after_bundler do
+  generate 'simple_form:install'
+end
 
 # >----------------------------[Less Framework] -----------------------------<
 after_bundler do
