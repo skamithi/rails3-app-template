@@ -392,7 +392,7 @@ if config['html5']
     after_bundler do
       say_wizard "HTML5 Boilerplate recipe running 'after bundler'"
       # Download HTML5 Boilerplate JavaScripts
-      get "https://raw.github.com/paulirish/html5-boilerplate/master/js/libs/modernizr-2.0.6.min.js", "app/assets/javascripts/modernizr.js"
+      get "https://github.com/h5bp/html5-boilerplate/blob/master/js/libs/modernizr-2.0.6.min.js"
       # Download stylesheet to normalize or reset CSS
       case config['css_option']
         when 'skeleton'
@@ -882,7 +882,7 @@ after_bundler do
   remove_dir "spec/requests"
   append_file '.gitignore', <<-CODE
 bin/
-.rvm*
+.rvm/*
 .metadata
 .project
 .idea/
