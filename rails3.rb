@@ -559,7 +559,7 @@ if config['geocode']
   gem 'geocode'
 
   after_bundler do
-    get 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/features/users/sign_in.feature', 'spec/support/mock_geocode.rb'
+    get 'https://raw.github.com/skamithi/rails3-app-template/master/mock_geocode.rb', 'spec/support/mock_geocode.rb'
   end
 
 else
