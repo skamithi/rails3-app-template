@@ -19,7 +19,7 @@ run "rvm use 1.9.2@rails31 --rvmrc"
 
 gem 'rails3-generators'
 
-@recipes = ["jquery", "haml", "cucumber", "capybara", "compass", "html5", "home_page", "guard", "rspec", "sass"]
+@recipes = ["jquery", "haml", "cucumber", "capybara", "compass", "home_page", "guard", "rspec", "sass", "geocode"]
 
 def recipes; @recipes end
 def recipe?(name); @recipes.include?(name) end
@@ -547,6 +547,24 @@ ERB
 
 end
 
+# >---------------------------------[geocode] --------------------------------
+@current_recipe = "geocode"
+@before_configs["guard"].call if @before_configs["guard"]
+say_recipe "geocode"
+
+config = {}
+config['geocode'] = yes_wizard?("Use Geocoder?") if true && true unless config.key?('geocode')
+@configs[@current_recipe] = config
+if config['geocode']
+  gem 'geocode'
+
+  after_bundler do
+    get 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/features/users/sign_in.feature', 'spec/support/mock_geocode.rb'
+  end
+
+else
+  recipe.delete 'geocode'
+end
 
 # >---------------------------------[ guard ]---------------------------------<
 
@@ -697,8 +715,6 @@ RUBY
     rspec_helper = 'spec/spec_helper.rb'
     gsub_file rspec_helper, /#\s*(config.mock_with :rr)/, '\1'
     gsub_file rspec_helper, /(config.mock_with :rspec)/, '#\1'
-
-
 
     if recipes.include? 'mongoid'
 
