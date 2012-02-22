@@ -15,7 +15,7 @@
 
 # >----------------------------[ Initial Setup ]------------------------------<
 # execute rvm
-run "rvm use 1.9.2@rails31 --rvmrc"
+run "rvm use 1.9.2@rails32 --rvmrc"
 
 gem 'rails3-generators'
 
@@ -71,6 +71,9 @@ def before_config(&block); @before_configs[@current_recipe] = block; end
 case Rails::VERSION::MAJOR.to_s
 when "3"
   case Rails::VERSION::MINOR.to_s
+  when "2"
+    say_wizard "You are using Rails version #{Rails::VERSION::STRING}."
+    @recipes << 'rails 3.2'
   when "1"
     say_wizard "You are using Rails version #{Rails::VERSION::STRING}."
     @recipes << 'rails 3.1'
@@ -122,7 +125,6 @@ RUBY
 prepend_file 'Gemfile' do <<-RUBY
 require 'rbconfig'
 HOST_OS = Config::CONFIG['host_os']
-
 RUBY
 end
 
@@ -364,7 +366,7 @@ SASS
     gem 'compass', :version => '~> 0.11'
 
     after_bundler do
-      run 'compass init rails'
+      run 'bundle exec compass init rails'
     end
   end
 else
@@ -563,7 +565,7 @@ if config['geocode']
   end
 
 else
-  recipe.delete 'geocode'
+  recipes.delete 'geocode'
 end
 
 # >---------------------------------[ guard ]---------------------------------<
@@ -581,6 +583,7 @@ if config['guard']
   gem 'guard', '>= 0.6.2', :group => :development
 
   append_file 'Gemfile' do <<-RUBY
+
 case HOST_OS
   when /darwin/i
     gem 'rb-fsevent', :group => :development
@@ -593,7 +596,8 @@ case HOST_OS
     gem 'win32console', :group => :development
     gem 'rb-notifu', :group => :development
 end
-  RUBY
+  
+RUBY
   end
 
   def guards
@@ -629,9 +633,9 @@ end
   end
 
   after_bundler do
-    run 'guard init'
+    run 'bundle exec guard init'
     guards.each do |name|
-      run "guard init #{name}"
+      run "bundle exec guard init #{name}"
     end
   end
 
