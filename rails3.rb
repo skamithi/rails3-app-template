@@ -842,6 +842,12 @@ after_bundler do
 
   protected
 
+  # Return 404 message if item cannot be found in controller
+  # Example: @task = Task.find_by_id(params[:id]) || not_found
+  def not_found
+    raise ActionController::RoutingError.new('Not Found')
+  end
+
   # use this in link_to statements
   # Example: link_to 'Back', go_back_path
   def go_back_path
