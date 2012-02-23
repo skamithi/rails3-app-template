@@ -15,7 +15,7 @@
 
 # >----------------------------[ Initial Setup ]------------------------------<
 # execute rvm
-run "rvm use 1.9.2@rails32 --rvmrc"
+run "rvm use ruby-1.9.2@rails32"
 
 gem 'rails3-generators'
 
@@ -128,7 +128,7 @@ HOST_OS = Config::CONFIG['host_os']
 RUBY
 end
 
-if recipes.include? 'rails 3.1'
+if recipes.include? 'rails 3.2'
   append_file 'Gemfile' do <<-RUBY
 # install a Javascript runtime for linux
 if HOST_OS =~ /linux/i
@@ -186,7 +186,7 @@ if config['jquery']
         gsub_file "config/application.rb", /jquery rails/, "jquery jqueryui rails"
       end
     end
-  elsif recipes.include? 'rails 3.1'
+  elsif recipes.include? 'rails 3.2'
     if config['ui']
       inside "app/assets/javascripts" do
         get "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js", "jqueryui.js"
@@ -348,7 +348,7 @@ config['compass'] = yes_wizard?("Would you like to use Compass for stylesheets?"
 @configs[@current_recipe] = config
 
 if config['compass']
-  if recipes.include? 'rails 3.1'
+  if recipes.include? 'rails 3.2'
     gem 'compass', :version => '~> 0.12.alpha.0'
 
     after_bundler do
@@ -389,7 +389,7 @@ config['css_option'] = multiple_choice("If you've chosen HTML5 Boilerplate, how 
 # https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/html5.rb
 
 if config['html5']
-  if recipes.include? 'rails 3.1'
+  if recipes.include? 'rails 3.2'
     gem 'frontend-helpers'
     after_bundler do
       say_wizard "HTML5 Boilerplate recipe running 'after bundler'"
