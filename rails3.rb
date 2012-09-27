@@ -570,8 +570,6 @@ end
 # note: there is no need to specify the RSpec generator in the config/application.rb file
 
 if config['rspec']
-  gem 'rr', '>= 1.0.3'
-
   after_bundler do
     say_wizard "RSpec recipe running 'after bundler'"
     generate 'rspec:install'
@@ -589,10 +587,6 @@ if config['rspec']
 
 RUBY
     end
-    #change mock testing to use RR
-    rspec_helper = 'spec/spec_helper.rb'
-    gsub_file rspec_helper, /#\s*(config.mock_with :rr)/, '\1'
-    gsub_file rspec_helper, /(config.mock_with :rspec)/, '#\1'
 
     if recipes.include? 'mongoid'
 
