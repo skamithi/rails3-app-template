@@ -15,9 +15,11 @@
 
 # >----------------------------[ Initial Setup ]------------------------------<
 # execute rvm
-run "rvm use ruby-1.9.2@rails32"
+run "rvm use ruby-1.9.3-p194@rails32"
 
 gem 'rails3-generators'
+gem 'rvm-capistrano'
+gem 'capistrano'
 
 @recipes = ["jquery", "haml", "cucumber", "capybara", "compass", "home_page", "guard", "rspec", "sass", "geocode"]
 
@@ -97,7 +99,8 @@ say_wizard "Checking configuration. Please confirm your preferences."
 # >---------------------------[Add Activerecord Squeel support] ------------------------------<
 
 gem 'squeel', ">= 0.8.10"
-
+gem 'therubyracer', '>= 0.8.2'
+gem 'thin'
 
 # >---------------------------[Nullify Blank Attributes ] ------------------------------------<
 initializer 'active_record_fixes.rb', <<-RUBY
@@ -111,7 +114,7 @@ RUBY
 
 # >-------------------------[Form field defaults] -------------------------------------------<
 initializer 'form_field_defaults.rb', <<-RUBY
-TEXT_FIELD_MIN = 1
+TEXT_FIELD_MIN = 5
 TEXT_FIELD_MAX = 100
 TEXT_FIELD_RANGE = TEXT_FIELD_MIN..TEXT_FIELD_MAX
 
@@ -120,24 +123,6 @@ TEXT_AREA_MAX = 500
 TEXT_AREA_RANGE = TEXT_AREA_MIN..TEXT_AREA_MAX
 RUBY
 
-# >---------------------------[ Javascript Runtime ]-----------------------------<
-
-prepend_file 'Gemfile' do <<-RUBY
-require 'rbconfig'
-HOST_OS = Config::CONFIG['host_os']
-RUBY
-end
-
-if recipes.include? 'rails 3.2'
-  append_file 'Gemfile' do <<-RUBY
-# install a Javascript runtime for linux
-if HOST_OS =~ /linux/i
-  gem 'therubyracer', '>= 0.8.2'
-end
-
-  RUBY
-  end
-end
 
 # >---------------------------------[ Recipes ]----------------------------------<
 
@@ -349,16 +334,18 @@ config['compass'] = yes_wizard?("Would you like to use Compass for stylesheets?"
 
 if config['compass']
   if recipes.include? 'rails 3.2'
-    gem 'compass', :version => '~> 0.12.alpha.0'
+    gem 'compass-rails'
 
     after_bundler do
       remove_file 'app/assets/stylesheets/application.css'
       create_file 'app/assets/stylesheets/application.css.sass' do <<-SASS
-//= require_self
-//= require_tree .
-
-@import compass
-@import _blueprint
+@import 'compass/utilities/general/clearfix'
+@import 'compass/reset'
+@import 'compass/css3/box-shadow'
+@import 'compass/css3/text-shadow'
+@import 'compass/css3/border-radius'
+@import 'compass/css3/images'
+@import 'blueprint/grid'
 SASS
       end
     end
@@ -374,64 +361,19 @@ else
 end
 
 
-# >---------------------------------[ html5 ]---------------------------------<
 
-@current_recipe = "html5"
-@before_configs["html5"].call if @before_configs["html5"]
-say_recipe 'html5'
+#------- Create HAML Application.html.haml ---------------------
 
-config = {}
-config['html5'] = yes_wizard?("Would you like to install HTML5 Boilerplate?") if true && true unless config.key?('html5')
-config['css_option'] = multiple_choice("If you've chosen HTML5 Boilerplate, how do you like your CSS?", [["Do nothing", "nothing"], ["Normalize CSS and add Skeleton styling", "skeleton"], ["Normalize CSS for consistent styling across browsers", "normalize"], ["Completely reset all CSS to eliminate styling", "reset"]]) if true && true unless config.key?('css_option')
-@configs[@current_recipe] = config
-
-# Application template recipe for the rails_apps_composer. Check for a newer version here:
-# https://github.com/RailsApps/rails_apps_composer/blob/master/recipes/html5.rb
-
-if config['html5']
-  if recipes.include? 'rails 3.2'
-    gem 'frontend-helpers'
-    after_bundler do
-      say_wizard "HTML5 Boilerplate recipe running 'after bundler'"
-      # Download HTML5 Boilerplate JavaScripts
-      get "https://github.com/h5bp/html5-boilerplate/blob/master/js/libs/modernizr-2.0.6.min.js"
-      # Download stylesheet to normalize or reset CSS
-      case config['css_option']
-        when 'skeleton'
-          get "https://raw.github.com/necolas/normalize.css/master/normalize.css", "app/assets/stylesheets/normalize.css.scss"
-          get "https://raw.github.com/dhgamache/Skeleton/master/stylesheets/base.css", "app/assets/stylesheets/base.css.scss"
-          get "https://raw.github.com/dhgamache/Skeleton/master/stylesheets/layout.css", "app/assets/stylesheets/layout.css.scss"
-          get "https://raw.github.com/dhgamache/Skeleton/master/stylesheets/skeleton.css", "app/assets/stylesheets/skeleton.css.scss"
-          get "https://raw.github.com/dhgamache/Skeleton/master/javascripts/tabs.js", "app/assets/javascripts/tabs.js"
-        when 'normalize'
-          get "https://raw.github.com/necolas/normalize.css/master/normalize.css", "app/assets/stylesheets/normalize.css.scss"
-        when 'reset'
-          get "https://raw.github.com/paulirish/html5-boilerplate/master/css/style.css", "app/assets/stylesheets/reset.css.scss"
-      end
-      # Download HTML5 Boilerplate Site Root Assets
-      get "https://raw.github.com/paulirish/html5-boilerplate/master/apple-touch-icon-114x114-precomposed.png", "public/apple-touch-icon-114x114-precomposed.png"
-      get "https://raw.github.com/paulirish/html5-boilerplate/master/apple-touch-icon-57x57-precomposed.png", "public/apple-touch-icon-57x57-precomposed.png"
-      get "https://raw.github.com/paulirish/html5-boilerplate/master/apple-touch-icon-72x72-precomposed.png", "public/apple-touch-icon-72x72-precomposed.png"
-      get "https://raw.github.com/paulirish/html5-boilerplate/master/apple-touch-icon-precomposed.png", "public/apple-touch-icon-precomposed.png"
-      get "https://raw.github.com/paulirish/html5-boilerplate/master/apple-touch-icon.png", "public/apple-touch-icon.png"
-      get "https://raw.github.com/paulirish/html5-boilerplate/master/crossdomain.xml", "public/crossdomain.xml"
-      get "https://raw.github.com/paulirish/html5-boilerplate/master/humans.txt", "public/humans.txt"
-      # Set up the default application layout
-      if recipes.include? 'haml'
-        # create some Haml helpers
-        # We have to use single-quote-style-heredoc to avoid interpolation.
-        inject_into_file 'app/controllers/application_controller.rb', :after => "protect_from_forgery\n" do <<-'RUBY'
-  include FrontendHelpers::Html5Helper
-RUBY
-        end
-        # Haml version of default application layout
-        remove_file 'app/views/layouts/application.html.erb'
-        remove_file 'app/views/layouts/application.html.haml'
-        # There is Haml code in this script. Changing the indentation is perilous between HAMLs.
-        create_file 'app/views/layouts/application.html.haml' do <<-HAML
-- html_tag class: 'no-js' do
+# Haml version of default application layout
+remove_file 'app/views/layouts/application.html.erb'
+remove_file 'app/views/layouts/application.html.haml'
+# There is Haml code in this script. Changing the indentation is perilous between HAMLs.
+create_file 'app/views/layouts/application.html.haml' do <<-HAML
+!!! 5
+%html
   %head
-    %title #{app_name}
+    %title
+      = content_for?(:page_title) ? yield(:page_title) : t(:default_title)
     %meta{:charset => "utf-8"}
     %meta{"http-equiv" => "X-UA-Compatible", :content => "IE=edge,chrome=1"}
     %meta{:name => "viewport", :content => "width=device-width, initial-scale=1, maximum-scale=1"}
@@ -448,59 +390,6 @@ RUBY
       %footer
 HAML
         end
-      else
-        # ERB version of default application layout
-        remove_file 'app/views/layouts/application.html.erb'
-        remove_file 'app/views/layouts/application.html.haml'
-        create_file 'app/views/layouts/application.html.erb' do <<-ERB
-<!doctype html>
-<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>#{app_name}</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <%= stylesheet_link_tag    "application" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body class="<%= params[:controller] %>">
-  <div id="container" class="container">
-    <header>
-    </header>
-    <div id="main" role="main">
-      <%= yield %>
-    </div>
-    <footer>
-    </footer>
-  </div> <!--! end of #container -->
-</body>
-</html>
-ERB
-        end
-        inject_into_file 'app/views/layouts/application.html.erb', :after => "<header>\n" do
-  <<-ERB
-      <%- flash.each do |name, msg| -%>
-        <%= content_tag :div, msg, :id => "flash_\#{name}" if msg.is_a?(String) %>
-      <%- end -%>
-ERB
-        end
-      end
-    end
-  elsif recipes.include? 'rails 3.0'
-    say_wizard "Not supported for Rails version #{Rails::VERSION::STRING}. HTML5 Boilerplate recipe skipped."
-  else
-    say_wizard "Don't know what to do for Rails version #{Rails::VERSION::STRING}. HTML5 Boilerplate recipe skipped."
-  end
-else
-  say_wizard "HTML5 Boilerplate recipe skipped. No CSS styles added."
-  recipes.delete('html5')
-end
 
 
 # >-------------------------------[ HomePage ]--------------------------------<
@@ -582,23 +471,8 @@ config['livereload'] = yes_wizard?("Would you like to enable the LiveReload guar
 if config['guard']
   gem 'guard', '>= 0.6.2', :group => :development
 
-  append_file 'Gemfile' do <<-RUBY
-
-case HOST_OS
-  when /darwin/i
-    gem 'rb-fsevent', :group => :development
-    gem 'growl', :group => :development
-  when /linux/i
-    gem 'libnotify', :group => :development
-    gem 'rb-inotify', :group => :development
-  when /mswin|windows/i
-    gem 'rb-fchange', :group => :development
-    gem 'win32console', :group => :development
-    gem 'rb-notifu', :group => :development
-end
-  
-RUBY
-  end
+  gem 'libnotify', :group => :development
+  gem 'rb-inotify', :group => :development
 
   def guards
     @guards ||= []
@@ -800,17 +674,6 @@ end
 gem 'simple_form'
 after_bundler do
   generate 'simple_form:install'
-end
-
-# >----------------------------[Less Framework] -----------------------------<
-after_bundler do
-  gem 'lessframework-rails'
-  prepend_file 'app/assets/stylesheets/application.css.sass', <<-RUBY
-//= require less15
-//= require less14
-//= require less133
-//= require retina
-  RUBY
 end
 
 # >-------------------------[Add error controller] -------------------------<
