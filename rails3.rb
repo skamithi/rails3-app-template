@@ -15,7 +15,7 @@
 
 # >----------------------------[ Initial Setup ]------------------------------<
 # execute rvm
-run "rvm use ruby-1.9.3-p194@rails32"
+run "rvm use ruby-1.9.3@rails32"
 
 gem 'rails3-generators'
 gem 'rvm-capistrano'
@@ -264,6 +264,11 @@ if config['cucumber']
 require 'factory_girl'
 Dir.glob(File.join(File.dirname(__FILE__), '../../spec/support/factories/*.rb')).each {|f| require f }
 RUBY
+    create_file "cucumber.yml", <<-RUBY
+default:
+  -r features/support
+  -r features/step_definitions
+    RUBY
   end
 end
 
